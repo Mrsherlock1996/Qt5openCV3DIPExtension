@@ -44,6 +44,7 @@
 #include "ConvertMatQImage.h"
 #include <iostream>
 #include <vector>
+#include <QThread>
 class FaceRec : public QObject
 {
 	Q_OBJECT
@@ -52,8 +53,7 @@ public:
 	FaceRec(QObject *parent);
 	FaceRec();
 	~FaceRec();
-	std::string _haarFaceDataPath; //opencv给出的训练好的haarcascade的xml文件路径,用于大众人脸识别
-	std::string _trainSetTxtFilePath; //训练集信息文件路径"C:/a.txt"
+
 
 	
 	std::vector<cv::Mat> _images;//存储train set
@@ -61,10 +61,25 @@ public:
 	//只需要标签和图片信息是对应的即可完成多人身份识别
 
 	cv::Size _size; //用于记录EigenFaceRec时所需要的尺寸,初始化默认为800,800,保证train和predict时size一致
+
+	cv::VideoCapture _camera;
+	bool _cameraState = false; //摄像头状态
 	bool _trainState = false;//训练开始标志开关
 	bool _recState=false;//是否开始识别的标志, true时识别, false不进行识别
+	bool _trainResult = false;//训练结果
 
-	void begainToRec(QString modelXmlAbsPath,QLabel* uiLabel );//直接将结果显示到ui中
-
-	void startTrain(QString trainSetTxtFilePath, QString resultXMLFilePath);
+	QString _trainSetTxtFilePathQStr; //训练集信息文件路径
+	QString _resultXMLFilePath;//训练结果保存路径
+	std::string _haarFaceDataPath; //opencv给出的训练好的haarcascade的xml文件路径,用于大众人脸识别
+	std::string _trainSetTxtFilePathStr; //训练集信息文件路径"C:/a.txt"
+	QString _modelXmlAbsPath; //模型xml文件
+	QLabel* _uiLabel; //显示组件
+	QLabel* _uiLabelCom;//大众显示组件
+	//训练
+	void startTrain();//训练模型,产生xml
+	//检测
+	void begainToRec();//直接将结果显示到ui中
+	void begainToCommonFaceRec();//大众人脸识别
+	//只实时显示
+	void onlyRealTimeShow();
 };
