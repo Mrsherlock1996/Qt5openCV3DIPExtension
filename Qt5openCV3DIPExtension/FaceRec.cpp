@@ -3,7 +3,7 @@
 FaceRec::FaceRec(QObject *parent)
 	: QObject(parent)
 {
-	_size = cv::Size(800, 800); //保证train和predict时size一致
+	_size = cv::Size(800, 800); //cv::face派生类要求: 保证train和predict时size一致
 }
 FaceRec::FaceRec()
 {
@@ -12,10 +12,18 @@ FaceRec::FaceRec()
 FaceRec::~FaceRec()
 {
 }
+
 //训练模型函数
-//输入训练集的txt信息文件的读取路径 和 模型的xml文件的保存所属文件夹路径
-//调用该函数应先打开标志开关为true
-//形参2, 不是文件路径"a/b/aa.xml"而是文件夹路径"a/b"
+//功能: 
+		//训练模型,存储model的xml文件
+//需要成员参数:	
+		//_haarFaceDataPath, _trainSetTxtFilePathStr,_trainSetTxtFilePathQStr
+		//_resultXMLFilePath
+		//_images, _labels
+//标志: 
+		//_trainState, _trainResult
+//注意点:
+		//保存xml路径:不是文件路径"a/b/aa.xml"而是文件夹路径"a/b"
 void FaceRec::startTrain()
 {
 	using namespace std;
@@ -23,15 +31,16 @@ void FaceRec::startTrain()
 	if (_trainState == true) //训练标志开关
 	{
 		//人脸检测使用的opencv训练好的cascade分类器的xml文件:
-		string _haarFaceDataPath = "haarcascade_frontalface_alt_tree.xml"; //haarcascade_frontalface_alt_tree.xml 已放到项目文件中
-		string _trainSetTxtFilePathStr = _trainSetTxtFilePathQStr.toStdString(); //fileName是txt文件
+		_haarFaceDataPath = "haarcascade_frontalface_alt_tree.xml"; //haarcascade_frontalface_alt_tree.xml 已放到项目文件中
+		_trainSetTxtFilePathStr = _trainSetTxtFilePathQStr.toStdString(); //fileName是txt文件
 		ifstream file(_trainSetTxtFilePathStr, ifstream::in);//file是存储身份人脸的txt文件,
 
 		//打开文件,读取图片和标签
 		if (file)
 		{
-			//获取身份人脸train set
+			_uiStatusBarLabel->setText(" BG:Training "); //开始训练, 更新ui状态栏
 
+			//获取身份人脸train set
 			string samplePath, sampleLabel;//用于存储单个样本的路径和对应标签
 			Mat resizeScaleAndGray;
 			while (getline(file, samplePath)) //读取第一行,即样本路径
@@ -84,34 +93,52 @@ void FaceRec::startTrain()
 			//训练后生成xml文件, 命名格式"指定的路径+模型所属类名.XML"
 			model->save(_resultXMLFilePath.toStdString() + "/EigenFaceRec.xml");
 			_trainResult = true;//训练ok结果更新
+
+			_uiStatusBarLabel->setText(" BG:TrainSuccess ");//训练完成,更新状态栏
 		}
 		else
 		{
 			_trainResult = false;//没有进行训练, 更新训练结果
+			_uiStatusBarLabel->setText(" BG: TrainEROOR ");
 		}
+	}
+	else
+	{
+		//没打开开关
+		_uiStatusBarLabel->setText(" BG: TrainStateIsFalse ");
 	}
 }
 
-//开始进行人脸检测,及身份识别
-//通过传递的xml文件路径来身份识别, 视频显示在传递的QLabel指针中
-//应在识别前打开_cameraState和_recState
+
+//人脸检测及身份识别函数
+//功能: 
+		//通过传递的xml文件路径来身份识别, 视频显示在传递的QLabel指针中
+//需要成员参数:	
+		//_haarFaceDataPath, _modelXmlAbsPath, 
+		//_camera, _uiLabel
+		//_images, _labels
+//标志: 
+		//_cameraState, _recState
+//注意点:
+		//需先传递cv::face的xml
+//需要释放的成员:
+		//_camera
 void FaceRec::begainToRec()
 {
 	using namespace std;
 	using namespace cv;
-	if (_recState == true) //应在调用函数前将标志开关使能
+	if (_recState == true && _cameraState) //应在调用函数前将标志开关使能
 	{
+		//创建人脸检测模型
 		//人脸检测使用的opencv训练好的cascade分类器的xml文件:
-		//			haarcascade_frontalface_alt_tree.xml 已放到项目文件中
+		//haarcascade_frontalface_alt_tree.xml 已放到项目文件中
 		string _haarFaceDataPath = "haarcascade_frontalface_alt_tree.xml";
 		string xmlFilePath = _modelXmlAbsPath.toStdString();
 
 
-		//创建cv::face::BasicFaceRecognizer对象
+		//创建身份识别模型
 		Ptr<cv::face::BasicFaceRecognizer> model = cv::face::EigenFaceRecognizer::create();
 		model->read(xmlFilePath); //加载训练好的身份识别模型
-
-
 
 		//调用摄像头, 识别人脸
 		//注意需要将帧数转换到QLabel中进行显示,需要Mat和QImage的转换
@@ -120,7 +147,7 @@ void FaceRec::begainToRec()
 		//Open Camera 
 		//需要外部指令将_cameraState设置成tru才能进入帧识别
 		_camera = VideoCapture (0);//调用默认摄像头
-		if (_camera.isOpened())
+		if (_camera.isOpened()) //打开摄像头,并且外部更新了摄像头状态
 		{
 			Mat frame; //帧
 			vector<Rect> faces; //检测大众人脸结果
@@ -148,23 +175,22 @@ void FaceRec::begainToRec()
 				{
 					Mat face = frame(faces[i]);//从当前帧中根据Rect坐标裁剪出定位到的人脸
 
-					//使用BasicFaceRecognizer对象进行predict
+					//身份识别
 					stringstream temp;
 					temp << model->predict(face);
 					temp >> recLabel;
 
-					//对检测到的人脸进行身份识别,就是预测值和标签值匹配
-					//对应绘制目标框
+					//结果匹配, 对检测到的人脸进行身份识别,就是预测值和标签值匹配
 					if (recLabel == label)
 					{
 						//绘制green框,文字
 						rectangle(frame, faces[i], Scalar(0, 255, 0), 1, 8, 0);
-						putText(frame, string("master"), faces[i].tl(), FONT_HERSHEY_PLAIN, 1, Scalar(255, 0, 0), 2, 8);
+						putText(frame, string("master"), faces[i].tl(), FONT_HERSHEY_SCRIPT_COMPLEX, 1, Scalar(255, 255, 255), 0.5, 8);
 					}
 					else
 					{
 						rectangle(frame, faces[i], Scalar(0, 0, 255), 1, 8, 0);
-						putText(frame, string("passerby"), faces[i].tl(), FONT_HERSHEY_PLAIN, 1, Scalar(255, 0, 0), 2, 8);
+						putText(frame, string("passerby"), faces[i].tl(), FONT_HERSHEY_SCRIPT_COMPLEX, 1, Scalar(255,255, 255), 0.5, 8);
 					}
 				}
 				//显示到指定ui->label中,跳出for循环是因为可能存在多个无身份人脸
@@ -181,11 +207,23 @@ void FaceRec::begainToRec()
 }
 
 
+//普通人脸检测
+//功能: 
+		//识别出所有的人脸并框出
+//需要成员参数:	
+		//_haarFaceDataPath, , 
+		//_camera, _uiLabel
+//标志: 
+		//_cameraState, _recState
+//注意点:
+		//使用cascade即使移入子线程,仍然卡顿
+//需要释放的成员:
+		//_camera
 void FaceRec::begainToCommonFaceRec()
 {
 	using namespace std;
 	using namespace cv;
-	if (_recState == true) //应在调用函数前将标志开关使能
+	if (_recState == true && _cameraState) //应在调用函数前将标志开关使能
 	{
 		//人脸检测使用的opencv训练好的cascade分类器的xml文件:
 		//			haarcascade_frontalface_alt_tree.xml 已放到项目文件中
@@ -197,7 +235,6 @@ void FaceRec::begainToCommonFaceRec()
 
 		//Open Camera 
 		//需要外部指令将_cameraState设置成tru才能进入帧识别
-
 		_camera = VideoCapture(0);//调用默认摄像头
 		if (_camera.isOpened())
 		{
@@ -217,14 +254,15 @@ void FaceRec::begainToCommonFaceRec()
 				//Mat resizeAndGray;
 				//cvtColor(frame, resizeAndGray, COLOR_BGR2GRAY);
 				//resize(resizeAndGray, resizeAndGray, _size);//使用初始化时的尺寸,保证train和predict时size一致
-				detector.detectMultiScale(frame, faces, 1.1, 3, 0, Size(50, 50), Size(1000, 1000)); //对本帧的resize副本进行检测
+				detector.detectMultiScale(frame, faces, 1.1, 2, 0, Size(50, 50), Size(1000, 1000)); //对本帧的resize副本进行检测
 
 				//框出所有人脸到该帧
 				for (int i = 0; i < faces.size(); i++)
 				{
 					Mat face = frame(faces[i]);//从当前帧中根据Rect坐标裁剪出定位到的人脸
-					rectangle(frame, faces[i], Scalar(255, 0, 0), 1, 8, 0);
-					putText(frame, string("FACE"), faces[i].tl(), FONT_HERSHEY_PLAIN, 1, Scalar(255, 0, 0), 2, 8);					
+					rectangle(frame, faces[i], Scalar(0, 255, 0), 1, 8, 0);
+					putText(frame, string("FACE"), faces[i].tl(), FONT_HERSHEY_SCRIPT_COMPLEX, 
+						1, Scalar(255, 255, 255), 0.5, 8);
 				}
 				//显示到指定ui->label中,跳出for循环是因为可能存在多个无身份人脸
 
@@ -241,21 +279,24 @@ void FaceRec::begainToCommonFaceRec()
 	}
 }
 
+//只实时显示视频函数
+//功能: 
+		//无操作,只输出视频流
+//需要成员参数:	
+		//_camera, _uiLabel
+//标志: 
+		//_cameraState,
+//注意点:
+		//
+//需要释放的成员:
+		//_camera
 void FaceRec::onlyRealTimeShow()
 {
 	using namespace std;
 	using namespace cv;
 	//if (_recState == true)//仅检测,无需使能
-	if (true) 
+	if (_cameraState)
 	{
-		//人脸检测使用的opencv训练好的cascade分类器的xml文件:
-		//			haarcascade_frontalface_alt_tree.xml 已放到项目文件中
-		string _haarFaceDataPath = "haarcascade_frontalface_alt_tree.xml";
-
-		//调用摄像头, 识别人脸
-		//注意需要将帧数转换到QLabel中进行显示,需要Mat和QImage的转换
-		//使用opencv提供好的CascadeClassifierXML文件识别大众人脸
-
 		//Open Camera 
 		//需要外部指令将_cameraState设置成tru才能进入帧识别
 		qDebug() << "FaceRec thread: " << QThread::currentThread() << endl;
@@ -264,7 +305,6 @@ void FaceRec::onlyRealTimeShow()
 		{
 			Mat frame; //帧
 			ConvertMatQImage cvt; //用于Mat和QImage转换
-
 
 			QImage img;
 			_camera.read(frame);

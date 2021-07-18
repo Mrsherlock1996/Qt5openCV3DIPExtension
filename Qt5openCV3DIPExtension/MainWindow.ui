@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1145</width>
-    <height>776</height>
+    <width>1002</width>
+    <height>745</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,43 +20,17 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
+      <property name="iconSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
       <widget class="QWidget" name="tabFaceRec">
        <attribute name="title">
         <string>FaceRecognition</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_6">
-        <item row="1" column="2">
-         <widget class="QGroupBox" name="groupBoxSelecTxtP">
-          <property name="title">
-           <string>选择的Txt路径</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_11">
-           <item row="0" column="0">
-            <widget class="QLabel" name="labelFRSelectTxtPath">
-             <property name="text">
-              <string>TextLabel</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="3" column="2">
-         <widget class="QGroupBox" name="groupBoxSelecXMLP">
-          <property name="title">
-           <string>选择的XML路径</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_14">
-           <item row="0" column="0">
-            <widget class="QLabel" name="labelFRSelectXMLPath">
-             <property name="text">
-              <string>TextLabel</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
         <item row="2" column="2">
          <widget class="QGroupBox" name="groupBoxGenXMLP">
           <property name="title">
@@ -66,104 +40,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="labelFRGenXMLPath">
              <property name="text">
-              <string>TextLabel</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="4" column="2">
-         <widget class="QGroupBox" name="groupBoxTrainSetP">
-          <property name="title">
-           <string>数据集根目录</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_12">
-           <item row="0" column="0">
-            <widget class="QLabel" name="labelFRTrainSetRootPath">
-             <property name="text">
-              <string>TextLabel</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="9" column="2">
-         <widget class="QGroupBox" name="groupBox_10">
-          <property name="title">
-           <string>识别结果评价</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="2">
-         <widget class="QGroupBox" name="groupBox_8">
-          <property name="title">
-           <string>功能</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_7">
-           <item row="0" column="0">
-            <widget class="QLabel" name="label">
-             <property name="text">
-              <string>人脸识别+身份识别(通过级联分类器的XML文件识别身份)</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="5" column="2">
-         <widget class="QGroupBox" name="groupBoxTOOLS">
-          <property name="title">
-           <string>工具</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_9">
-           <item row="1" column="1">
-            <widget class="QPushButton" name="pushButtonFRGenTxt">
-             <property name="text">
-              <string>遍历训练集,生成txt文件</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="2">
-            <widget class="QPushButton" name="pushButtonFRSelectXML">
-             <property name="text">
-              <string>选择XML文件</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <widget class="QPushButton" name="pushButtonFRSelectTxt">
-             <property name="text">
-              <string>选择txt文件</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QPushButton" name="pushButtonFRRunRecByGen">
-             <property name="text">
-              <string>开始检测(通过生成的XML)</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QPushButton" name="pushButtonFRGenXML">
-             <property name="text">
-              <string>训练模型,生成XML文件</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QPushButton" name="pushButtonFRRunRecBySelecte">
-             <property name="text">
-              <string>开始检测(通过选择的XML)</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="1" colspan="2">
-            <widget class="QPushButton" name="pushButtonFRStop">
-             <property name="text">
-              <string>STOP</string>
+              <string>xml路径</string>
              </property>
             </widget>
            </item>
@@ -179,14 +56,173 @@
            <item row="0" column="0">
             <widget class="QLabel" name="labelFRGenTxtPath">
              <property name="text">
-              <string>TextLabel</string>
+              <string>txt路径</string>
              </property>
             </widget>
            </item>
           </layout>
          </widget>
         </item>
-        <item row="9" column="0" colspan="2">
+        <item row="5" column="2">
+         <widget class="QGroupBox" name="groupBoxTOOLS">
+          <property name="title">
+           <string>识别(需载入XML文件)</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_9">
+           <item row="2" column="1" colspan="2">
+            <widget class="QPushButton" name="pushButtonFRCommonFaceRec">
+             <property name="text">
+              <string>大众人脸识别(无需训练)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QPushButton" name="pushButtonFRRunRecByGen">
+             <property name="text">
+              <string>开始检测(通过生成的XML)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QPushButton" name="pushButtonFRRunRecBySelecte">
+             <property name="text">
+              <string>开始检测(通过选择的XML)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1" colspan="2">
+            <widget class="QPushButton" name="pushButtonFROnlyCamera">
+             <property name="text">
+              <string>只打开视频(无检测,无识别)</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="7" column="2">
+         <widget class="QGroupBox" name="groupBox_8">
+          <property name="title">
+           <string>备注</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_7">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>训练需要载入训练图片的标注: txt文件</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>训练生成模型状态信息: XML文件</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="4" column="2">
+         <widget class="QGroupBox" name="groupBoxTrainSetP">
+          <property name="title">
+           <string>数据集根目录</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_12">
+           <item row="0" column="0">
+            <widget class="QLabel" name="labelFRTrainSetRootPath">
+             <property name="text">
+              <string>训练集路径</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QGroupBox" name="groupBoxSelecTxtP">
+          <property name="title">
+           <string>选择的Txt路径</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_11">
+           <item row="0" column="0">
+            <widget class="QLabel" name="labelFRSelectTxtPath">
+             <property name="text">
+              <string>txt路径</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="6" column="2">
+         <widget class="QGroupBox" name="groupBox_10">
+          <property name="title">
+           <string>训练</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_16">
+           <item row="0" column="0">
+            <widget class="QPushButton" name="pushButtonFRGenTxt">
+             <property name="text">
+              <string>遍历训练集,生成txt文件</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QPushButton" name="pushButtonFRSelectTxt">
+             <property name="text">
+              <string>选择txt文件</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QPushButton" name="pushButtonFRGenXML">
+             <property name="text">
+              <string>训练模型,生成XML文件</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QPushButton" name="pushButtonFRSelectXML">
+             <property name="text">
+              <string>选择XML文件</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QGroupBox" name="groupBoxSelecXMLP">
+          <property name="title">
+           <string>选择的XML路径</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_14">
+           <item row="0" column="0">
+            <widget class="QLabel" name="labelFRSelectXMLPath">
+             <property name="text">
+              <string>xml路径</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="10" column="2">
+         <widget class="QPushButton" name="pushButtonFRStop">
+          <property name="text">
+           <string>STOP</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" rowspan="11" colspan="2">
+         <widget class="QLabel" name="labelShowFace">
+          <property name="text">
+           <string>显示区域</string>
+          </property>
+         </widget>
+        </item>
+        <item row="11" column="0" colspan="3">
          <widget class="QGroupBox" name="groupBox_7">
           <property name="enabled">
            <bool>true</bool>
@@ -198,7 +234,7 @@
            <item row="0" column="0">
             <widget class="QGroupBox" name="groupBox_9">
              <property name="title">
-              <string>生成的txt文件内容</string>
+              <string>根目录下全部文件</string>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout">
               <item>
@@ -208,27 +244,6 @@
             </widget>
            </item>
           </layout>
-         </widget>
-        </item>
-        <item row="7" column="2">
-         <widget class="QPushButton" name="pushButtonFRCommonFaceRec">
-          <property name="text">
-           <string>大众人脸识别(无需训练)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0" rowspan="8" colspan="2">
-         <widget class="QLabel" name="labelShowFace">
-          <property name="text">
-           <string>TextLabel</string>
-          </property>
-         </widget>
-        </item>
-        <item row="8" column="2">
-         <widget class="QPushButton" name="pushButtonFROnlyCamera">
-          <property name="text">
-           <string>只打开视频(无检测,无识别)</string>
-          </property>
          </widget>
         </item>
        </layout>
@@ -413,24 +428,6 @@
      </widget>
     </item>
    </layout>
-  </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1145</width>
-     <height>22</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>

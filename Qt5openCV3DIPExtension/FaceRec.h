@@ -54,20 +54,21 @@ public:
 	FaceRec();
 	~FaceRec();
 
-
-	
 	std::vector<cv::Mat> _images;//存储train set
 	std::vector<int> _labels;//存储train set labels
-	//只需要标签和图片信息是对应的即可完成多人身份识别
 
 	cv::Size _size; //用于记录EigenFaceRec时所需要的尺寸,初始化默认为800,800,保证train和predict时size一致
+	
+	cv::VideoCapture _camera; //摄像头
 
-	cv::VideoCapture _camera;
-	bool _cameraState = false; //摄像头状态
+	//必要标志
 	bool _trainState = false;//训练开始标志开关
-	bool _recState=false;//是否开始识别的标志, true时识别, false不进行识别
-	bool _trainResult = false;//训练结果
+	bool _trainResult = false;//训练结果标志
+	bool _recState=false;//是否开始人脸检测标志, true时识别, false不进行识别
+	bool _cameraState = false; //摄像头状态控制帧循环, 外部开启摄像头时,先将其置为true
+	//_cameraState是将摄像头控制权给予了外部,避免程序自行调用
 
+	//必要参数
 	QString _trainSetTxtFilePathQStr; //训练集信息文件路径
 	QString _resultXMLFilePath;//训练结果保存路径
 	std::string _haarFaceDataPath; //opencv给出的训练好的haarcascade的xml文件路径,用于大众人脸识别
@@ -75,6 +76,8 @@ public:
 	QString _modelXmlAbsPath; //模型xml文件
 	QLabel* _uiLabel; //显示组件
 	QLabel* _uiLabelCom;//大众显示组件
+	QLabel* _uiStatusBarLabel;//更新ui界面状态栏后台Label
+
 	//训练
 	void startTrain();//训练模型,产生xml
 	//检测
