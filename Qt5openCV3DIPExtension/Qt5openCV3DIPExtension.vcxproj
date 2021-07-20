@@ -92,6 +92,7 @@
     <QtMoc Include="MainWindow.h" />
     <ClCompile Include="ConvertMatQImage.cpp" />
     <ClCompile Include="FaceRec.cpp" />
+    <ClCompile Include="ImageMatch.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -105,6 +106,9 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="haarcascade_frontalface_alt_tree.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="ImageMatch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

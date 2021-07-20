@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1002</width>
-    <height>745</height>
+    <width>1080</width>
+    <height>761</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,9 +16,9 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QTabWidget" name="tabWidgetFaceRec">
+     <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="iconSize">
        <size>
@@ -248,106 +248,192 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tabObjDetect">
+      <widget class="QWidget" name="tabImgMatch">
        <attribute name="title">
-        <string>ObjectDetect</string>
+        <string>ImageMatch</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
-        <item row="2" column="0">
-         <widget class="QGroupBox" name="groupBox">
-          <property name="title">
-           <string>GroupBox</string>
+        <item row="0" column="0" rowspan="4" colspan="5">
+         <widget class="QLabel" name="labelShowIMResult">
+          <property name="text">
+           <string>ResultImg</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
-         <widget class="QGroupBox" name="groupBox_3">
+        <item row="6" column="3" colspan="2">
+         <widget class="QGroupBox" name="groupBoxButtons">
           <property name="title">
-           <string>GroupBox</string>
+           <string>检测</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout_8">
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_2">
+          <layout class="QGridLayout" name="gridLayout_3">
+           <item row="2" column="2">
+            <widget class="QPushButton" name="pushButtonIMHog">
              <property name="text">
-              <string>目标检测,暂时只做目标匹配方面</string>
+              <string>HOG</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QPushButton" name="pushButtonIMSurf">
+             <property name="text">
+              <string>SURF</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QPushButton" name="pushButtonIMLbp">
+             <property name="text">
+              <string>LBP</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QPushButton" name="pushButtonIMSift">
+             <property name="text">
+              <string>SIFT</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QPushButton" name="pushButtonIMDpm">
+             <property name="text">
+              <string>DPM</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QPushButton" name="pushButtonIMHaaris">
+             <property name="text">
+              <string>Harris(只检测)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QPushButton" name="pushButtonIMShitomasi">
+             <property name="text">
+              <string>Shi-Tomasi(只检测)</string>
              </property>
             </widget>
            </item>
           </layout>
          </widget>
         </item>
-        <item row="0" column="2">
-         <widget class="QGroupBox" name="groupBoxSrc">
-          <property name="title">
-           <string>GroupBox</string>
-          </property>
-          <widget class="QLabel" name="labelShowODSrc">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>271</width>
-             <height>216</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
-         </widget>
+        <item row="5" column="0" rowspan="2" colspan="2">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QGroupBox" name="groupBoxSrc">
+            <property name="title">
+             <string>训练图片(旧图片)</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_8">
+             <item row="0" column="0">
+              <widget class="QLabel" name="labelShowIMOldImg">
+               <property name="text">
+                <string>SrcImage</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBoxTemplate">
+            <property name="title">
+             <string>检测图片(新图片)</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_17">
+             <item row="0" column="0">
+              <widget class="QLabel" name="labelShowIMNewImg">
+               <property name="text">
+                <string>TemplateImage</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
         </item>
-        <item row="0" column="3">
-         <widget class="QGroupBox" name="groupBoxTemplate">
+        <item row="6" column="2">
+         <widget class="QGroupBox" name="groupBox">
           <property name="title">
-           <string>GroupBox</string>
+           <string>工具</string>
           </property>
-          <widget class="QLabel" name="labelShowODTemp">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>271</width>
-             <height>216</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
-         </widget>
-        </item>
-        <item row="0" column="0" rowspan="2" colspan="2">
-         <widget class="QLabel" name="labelShowODResult">
-          <property name="text">
-           <string>TextLabel</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="3" rowspan="2">
-         <widget class="QGroupBox" name="groupBoxButtons">
-          <property name="title">
-           <string>GroupBox</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_3">
+          <layout class="QGridLayout" name="gridLayout_18">
            <item row="0" column="0">
-            <widget class="QPushButton" name="pushButtonODMatch">
+            <widget class="QPushButton" name="pushButtonIMOriginOld">
              <property name="text">
-              <string>Match</string>
+              <string>显示训练原图</string>
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
-            <widget class="QPushButton" name="pushButtonODAddSrc">
+           <item row="3" column="1">
+            <widget class="QPushButton" name="pushButtonIMAddNewImg">
              <property name="text">
-              <string>AddSourceImage</string>
+              <string>添加检测图片</string>
              </property>
             </widget>
            </item>
-           <item row="2" column="0">
-            <widget class="QPushButton" name="pushButtonODAddTemp">
+           <item row="0" column="1">
+            <widget class="QPushButton" name="pushButtonIMAddOldImg">
              <property name="text">
-              <string>AddTemplateImage</string>
+              <string>添加训练图片</string>
              </property>
+            </widget>
+           </item>
+           <item row="4" column="0" colspan="2">
+            <widget class="QPushButton" name="pushButtonIMClearAll">
+             <property name="text">
+              <string>清空</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QPushButton" name="pushButtonIMOriginNew">
+             <property name="text">
+              <string>显示检测原图</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="5" column="2" colspan="3">
+         <widget class="QGroupBox" name="groupBox_3">
+          <property name="title">
+           <string>训练图片路径</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QGroupBox" name="groupBox_11">
+             <property name="title">
+              <string>训练</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_2">
+              <item>
+               <widget class="QLabel" name="labelIMOldImgPath">
+                <property name="text">
+                 <string>训练图片路径</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_12">
+             <property name="title">
+              <string>检测</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_3">
+              <item>
+               <widget class="QLabel" name="labelIMNewImgPath">
+                <property name="text">
+                 <string>检测图片路径</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </item>
           </layout>

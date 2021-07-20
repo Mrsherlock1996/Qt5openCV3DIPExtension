@@ -10,6 +10,7 @@
 #include <QLabel>
 #include <qtimer.h>
 #include <qdatetime.h>
+#include "ImageMatch.h"
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -30,12 +31,13 @@ public:
 	FaceRec* _faceTrain;//专门用于训练
 	QThread* _threadFR; //用于人脸识别的线程
 	QThread* _threadFRTrain;
-		//必要标志
+	
 	bool _flagGenXML = false; //如下标志为避免检测时QLabel为空,引发bug
 	bool _flagSelecteXML = false;
 
-	//目标检测部分
-
+	//ImageMatch部分
+	ImageMatch* _imgMatch;
+	QThread* _threadIM;
 	//银行卡识别部分
 
 	//CNN部分
@@ -47,7 +49,14 @@ signals:
 	void _FROnlyShow();//开始只显示信号
 	void _FRStopRec(); //停止检测信号
 
-	//目标检测部分
+	//图像特征匹配部分
+	void _IMStartHaar();
+	void _IMStartShitomasi();
+	void _IMStartSIFT();
+	void _IMStartSURF();
+	void _IMStartLBP();
+	void _IMStartHOG();
+	void _IMStartDPM();
 
 	//银行卡识别部分
 
@@ -57,6 +66,7 @@ signals:
 public slots:
 	//时间显示
 	void showCurrentTime();
+
 	//FaceRec
 	void iniFaceRec();
 	void on_pushButtonFRGenXML_clicked();//生成xml文件(训练)
@@ -72,9 +82,18 @@ public slots:
 	void on_pushButtonFRStop_clicked(); //停止识别工作
 
 
-	//ObjectDetect
+	//ImageMatch
+	void iniImgMatch();//初始化
+	void on_pushButtonIMAddOldImg_clicked();  //选择训练图片
+	void on_pushButtonIMAddNewImg_clicked();	//选择测试图片
+	void on_pushButtonIMOriginOld_clicked();	//显示训练图片到大图
+	void on_pushButtonIMOriginNew_clicked();	//显示检测图片到大图
+	void on_pushButtonIMClearAll_clicked();	//清空全部
 
-	//银行卡识别
+	void on_pushButtonIMHaaris_clicked(); //harris角点检测
+	void on_pushButtonIMShitomasi_clicked();
+	void on_pushButtonIMSift_clicked();
+	void on_pushButtonIMSurf_clicked();
 
 	//CNN
 };

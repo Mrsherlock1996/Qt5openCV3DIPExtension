@@ -24,8 +24,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 	//FaceRec部分
 	iniFaceRec();
-	//目标检测部分
-
+	//ImageMatch部分
+	iniImgMatch();
 	//银行卡识别部分
 
 	//CNN部分
@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::showCurrentTime()
 {
 	QDateTime currentTime = QDateTime::currentDateTime();
-	QString timestr = currentTime.toString("yyyy-MM-dd- hh:mm:ss"); //设置显示的格式
+	QString timestr = currentTime.toString("yyyy-MM-dd hh:mm:ss"); //设置显示的格式
 	_timeLabel->setText(timestr);
 }
 
@@ -77,7 +77,8 @@ void MainWindow::iniFaceRec()
 		//训练model,生成FaceRecognizer检测器模型状态xml文件
 		//将训练结果在ui展示
 //所需参数:
-		//已有的txt文件路径,  生成xml保存路径
+		//已有的txt文件路径,  生成xml保存路径, 
+		//ui状态栏标签_backGroundProcess
 //更新标志:
 		//_flagGenXML
 //注意点:
@@ -86,6 +87,7 @@ void MainWindow::iniFaceRec()
 void MainWindow::on_pushButtonFRGenXML_clicked()
 {
 	_flagGenXML = true;
+	//设置txt和xml路径
 	//获取txt和xml相关路径
 	QFileDialog fileDlg;
 	QString txtPath = fileDlg.getOpenFileName(
@@ -93,7 +95,12 @@ void MainWindow::on_pushButtonFRGenXML_clicked()
 	//注意这里的xmlPath不是文件路径"a/b/aa.xml"而是文件夹路径"a/b"
 	QString xmlPath = fileDlg.getExistingDirectory(
 		nullptr, "Select a path to save .XML of your model", QDir::currentPath());
-
+	//传递状态栏label指针
+	QLabel*  temp = _backGroundProcess;
+	//_faceRec->_uiStatusBarLabel = _backGroundProcess;
+	_faceRec->_uiStatusBarLabel = temp;
+	//设置FaceRec开始训练开关
+	_faceRec->_trainState = true;
 	//调用FaceRec::startTrain训练检测模型
 	//_faceTrain->startTrain(txtPath, xmlPath);//非多线程
 	emit _FRStartTrain();//多线程
@@ -369,4 +376,251 @@ void MainWindow::on_pushButtonFRStop_clicked()
 	_nowProcess->setText(" Now: nothing ");
 }
 
+
+
+
+//ImageMatch部分
+
+void MainWindow::iniImgMatch()
+{
+	_imgMatch = new ImageMatch;		//创建类对象
+	//组件初始化
+	ui.pushButtonIMOriginNew->setDisabled(true);//添加图片后解锁
+	ui.pushButtonIMOriginOld->setDisabled(true);
+	ui.labelShowIMNewImg->clear();
+	ui.labelShowIMOldImg->clear();
+	ui.labelShowIMResult->clear();
+	ui.labelIMNewImgPath->clear();
+	ui.labelIMOldImgPath->clear();
+	ui.labelShowIMResult->setText("Please add A image to process!");
+	ui.labelShowIMResult->setAlignment(Qt::AlignCenter);//居中
+}
+
+//显示old图片
+//功能: 选择图片,并居中缩放显示
+//flag: 无
+void MainWindow::on_pushButtonIMAddOldImg_clicked()
+{
+	//获取文件路径
+	QFileDialog fileDlg;
+	QString imgPath = fileDlg.getOpenFileName(this, "Select A original image",
+		QDir::currentPath(), "jpg(*.jpg);;png(*.png);;all(*.*)");
+	//显示图片路径
+	if (!imgPath.isEmpty()) //避免空选
+	{
+		ui.labelIMOldImgPath->setText(imgPath);//显示路径
+		QImage oldImg(imgPath);
+		QSize oldImgSize = ui.labelShowIMOldImg->size();
+		oldImg = oldImg.scaled(oldImgSize,Qt::KeepAspectRatio); //调整大小
+		ui.labelShowIMOldImg->setPixmap(QPixmap::fromImage(oldImg));	//显示
+		ui.labelShowIMOldImg->setAlignment(Qt::AlignCenter);//居中
+		ui.pushButtonIMOriginOld->setDisabled(false);//解锁组件
+	}
+	else
+	{
+		QMessageBox::warning(nullptr, "NO IMAGE PATH",
+			"You select nothing", QMessageBox::Ok);
+	}
+}
+
+
+//显示new图片
+//功能: 选择图片,并居中缩放显示
+//flag: 无
+void MainWindow::on_pushButtonIMAddNewImg_clicked()
+{
+	//获取文件路径
+	QFileDialog fileDlg;
+	QString imgPath = fileDlg.getOpenFileName(this, "Select A original image",
+		QDir::currentPath(), "jpg(*.jpg);;png(*.png);;all(*.*)");
+	//显示图片路径
+	if (!imgPath.isEmpty()) //避免空选
+	{
+		ui.labelIMNewImgPath->setText(imgPath);//显示路径
+		QImage newImg(imgPath);
+		QSize newImgSize = ui.labelShowIMNewImg->size();
+		newImg = newImg.scaled(newImgSize, Qt::KeepAspectRatio); //调整大小
+		ui.labelShowIMNewImg->setPixmap(QPixmap::fromImage(newImg));	//显示
+		ui.labelShowIMNewImg->setAlignment(Qt::AlignCenter);//居中
+		ui.pushButtonIMOriginNew->setDisabled(false);//解锁组件
+	}
+	else
+	{
+		QMessageBox::warning(nullptr, "NO IMAGE PATH",
+			"You select nothing", QMessageBox::Ok);
+	}
+}
+
+
+//显示训练原图
+void MainWindow::on_pushButtonIMOriginOld_clicked()
+{
+	//获取文件路径
+	QString imgPath = ui.labelIMOldImgPath->text();
+	//显示图片路径
+	if (!imgPath.isEmpty()) //避免空选
+	{
+		QImage oldImg(imgPath);
+		QSize oldImgSize = ui.labelShowIMResult->size();
+		oldImg = oldImg.scaled(oldImgSize, Qt::KeepAspectRatio); //调整大小
+		ui.labelShowIMResult->setPixmap(QPixmap::fromImage(oldImg));	//显示
+		ui.labelShowIMResult->setAlignment(Qt::AlignCenter);//居中
+	}
+	else
+	{
+		QMessageBox::warning(nullptr, "NO IMAGE PATH",
+			"Add A Old/Train Image At First ", QMessageBox::Ok);
+	}
+}
+
+
+//显示检测原图
+void MainWindow::on_pushButtonIMOriginNew_clicked()
+{
+	//获取文件路径
+	QString imgPath = ui.labelIMNewImgPath->text();
+	//显示图片路径
+	if (!imgPath.isEmpty()) //避免空选
+	{
+		QImage newImg(imgPath);
+		QSize newImgSize = ui.labelShowIMResult->size();
+		newImg = newImg.scaled(newImgSize, Qt::KeepAspectRatio); //调整大小
+		ui.labelShowIMResult->setPixmap(QPixmap::fromImage(newImg));	//显示
+		ui.labelShowIMResult->setAlignment(Qt::AlignCenter);//居中
+	}
+	else
+	{
+		QMessageBox::warning(nullptr, "NO IMAGE PATH",
+			"Add A New/Test Image At First ", QMessageBox::Ok);
+	}
+}
+
+
+//清空全部
+//功能:清空全部并锁定相关组件
+void MainWindow::on_pushButtonIMClearAll_clicked()
+{
+	ui.labelShowIMNewImg->clear();
+	ui.labelShowIMOldImg->clear();
+	ui.labelShowIMResult->clear();
+	ui.labelIMNewImgPath->clear();
+	ui.labelIMOldImgPath->clear();
+
+	ui.pushButtonIMOriginNew->setDisabled(true);
+	ui.pushButtonIMOriginOld->setDisabled(true);
+
+	ui.labelShowIMResult->setText("Please add A image to process!");
+	ui.labelShowIMResult->setAlignment(Qt::AlignCenter);//居中
+
+}
+
+
+//Haaris角点检测
+//功能:	实现单图的角点检测(只检测)
+//参数:
+		//_uiLabelShowImg,
+//标志:
+		//_flagHaar
+void MainWindow::on_pushButtonIMHaaris_clicked()
+{
+	//先获取图片路径,防止无图
+	QString imgPath = ui.labelIMNewImgPath->text();
+	if (!imgPath.isEmpty())
+	{
+		_imgMatch->_uiLabelShowImg = ui.labelShowIMResult;
+		_imgMatch->_flagHaar = true;
+		_imgMatch->_matchImgPath = imgPath;
+		//emit _IMStartHaar;	//发射启动
+		_imgMatch->imgMatchHaar();
+	}
+	else
+	{
+		QMessageBox::warning(nullptr, "NO IMAGE PATH",
+			"Add A New/Test Image At First ", QMessageBox::Ok);
+	}
+
+}
+
+
+//Shi-Tomasi角点检测
+//功能:	实现单图的角点检测(只检测)
+//参数:
+		//_uiLabelShowImg,
+//标志:
+		//_flagShitomasi
+void MainWindow::on_pushButtonIMShitomasi_clicked()
+{
+	//先获取图片路径,防止无图
+	QString imgPath = ui.labelIMNewImgPath->text();
+	if (!imgPath.isEmpty())
+	{
+		_imgMatch->_uiLabelShowImg = ui.labelShowIMResult;
+		_imgMatch->_flagShitomasi = true;
+		_imgMatch->_matchImgPath = imgPath;
+		//emit _IMStartHaar;	//发射启动
+		_imgMatch->imgMatchShitomasi();
+	}
+	else
+	{
+		QMessageBox::warning(nullptr, "NO IMAGE PATH",
+			"Add A New/Test Image At First ", QMessageBox::Ok);
+	}
+
+}
+
+
+
+//SIFT特征检测
+//功能:	实现两张图的特征检测,并匹配相关联的信息
+//参数:
+		//_uiLabelShowImg,
+//标志:
+		//_flagSift
+void MainWindow::on_pushButtonIMSift_clicked()
+{
+	QString trainPath = ui.labelIMOldImgPath->text();
+	QString testPath = ui.labelIMNewImgPath->text();
+	if ((!trainPath.isEmpty()) && (!testPath.isEmpty()))
+	{
+		_imgMatch->_uiLabelShowImg = ui.labelShowIMResult;
+		_imgMatch->_flagSift = true;
+		_imgMatch->_trainImgPath = trainPath;
+		_imgMatch->_matchImgPath = testPath;
+		//emit IMStartSIFT;
+		_imgMatch->imgMatchSift();
+	}
+	else
+	{
+		QMessageBox::warning(nullptr, "NO IMAGE PATH",
+			"Add Train/Test Images At First ", QMessageBox::Ok);
+	}
+
+}
+
+//SURF特征检测
+//功能:	实现两张图的特征检测,并匹配相关联的信息
+//参数:
+		//_uiLabelShowImg,
+//标志:
+		//_flagSurf
+void MainWindow::on_pushButtonIMSurf_clicked()
+{
+	QString trainPath = ui.labelIMOldImgPath->text();
+	QString testPath = ui.labelIMNewImgPath->text();
+	if ((!trainPath.isEmpty()) && (!testPath.isEmpty()))
+	{
+		_imgMatch->_uiLabelShowImg = ui.labelShowIMResult;
+		_imgMatch->_flagSurf = true;
+		_imgMatch->_trainImgPath = trainPath;
+		_imgMatch->_matchImgPath = testPath;
+		//emit IMStartSIFT;
+		_imgMatch->imgMatchSurf();
+	}
+	else
+	{
+		QMessageBox::warning(nullptr, "NO IMAGE PATH",
+			"Add Train/Test Images At First ", QMessageBox::Ok);
+	}
+
+}
 

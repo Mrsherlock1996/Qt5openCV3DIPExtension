@@ -58,7 +58,7 @@ public:
 	std::vector<int> _labels;//存储train set labels
 
 	cv::Size _size; //用于记录EigenFaceRec时所需要的尺寸,初始化默认为800,800,保证train和predict时size一致
-	
+	QSize _labelSize;
 	cv::VideoCapture _camera; //摄像头
 
 	//必要标志

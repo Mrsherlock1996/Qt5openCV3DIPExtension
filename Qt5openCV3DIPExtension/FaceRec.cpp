@@ -43,6 +43,7 @@ void FaceRec::startTrain()
 			//获取身份人脸train set
 			string samplePath, sampleLabel;//用于存储单个样本的路径和对应标签
 			Mat resizeScaleAndGray;
+
 			while (getline(file, samplePath)) //读取第一行,即样本路径
 			{
 				getline(file, sampleLabel);//读取第二行,即样本标签
@@ -156,6 +157,10 @@ void FaceRec::begainToRec()
 			ConvertMatQImage cvt; //用于Mat和QImage转换
 			QImage img;
 			_camera.read(frame);
+
+			//设置图片缩放
+			_labelSize = _uiLabel->size();
+
 			//对每一帧进行识别检测
 			while (_camera.read(frame)&&_cameraState)  //这样可以通过外部指令将_cameraState写为false就能停止帧识别
 			{
@@ -195,6 +200,7 @@ void FaceRec::begainToRec()
 				}
 				//显示到指定ui->label中,跳出for循环是因为可能存在多个无身份人脸
 				img = cvt.matToQImage(&frame);
+				img.scaled(_labelSize, Qt::KeepAspectRatio);
 				_uiLabel->setPixmap(QPixmap::fromImage(img));
 			}
 		}
@@ -245,6 +251,10 @@ void FaceRec::begainToCommonFaceRec()
 			ConvertMatQImage cvt; //用于Mat和QImage转换
 
 			QImage img;
+
+			//设置图片缩放
+			_labelSize = _uiLabelCom->size();
+
 			_camera.read(frame);
 			//对每一帧进行识别检测
 			while (_camera.read(frame) && _cameraState)  //这样可以通过外部指令将_cameraState写为false就能停止帧识别
@@ -267,6 +277,7 @@ void FaceRec::begainToCommonFaceRec()
 				//显示到指定ui->label中,跳出for循环是因为可能存在多个无身份人脸
 
 				img = cvt.matToQImage(&frame);
+				img.scaled(_labelSize, Qt::KeepAspectRatio);
 				_uiLabelCom->setPixmap(QPixmap::fromImage(img));
 
 			}
@@ -307,12 +318,17 @@ void FaceRec::onlyRealTimeShow()
 			ConvertMatQImage cvt; //用于Mat和QImage转换
 
 			QImage img;
+
+			//设置图片缩放
+			_labelSize = _uiLabelCom->size();
+
 			_camera.read(frame);
 			//显示每一帧
 			while (_camera.read(frame) && _cameraState)  //这样可以通过外部指令将_cameraState写为false就能停止帧识别
 			{
 				flip(frame, frame, 1);//图片左右翻转
 				img = cvt.matToQImage(&frame);
+				img.scaled(_labelSize, Qt::KeepAspectRatio);
 				_uiLabelCom->setPixmap(QPixmap::fromImage(img));
 			}
 		}
