@@ -11,6 +11,7 @@
 #include <qtimer.h>
 #include <qdatetime.h>
 #include "ImageMatch.h"
+#include <qinputdialog.h>
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -48,6 +49,7 @@ signals:
 	void _FRStartCommonRec(); //开始大众检测信号
 	void _FROnlyShow();//开始只显示信号
 	void _FRStopRec(); //停止检测信号
+	void _FRStartCommonRecByLBPH(); //LBPH大众人脸识别
 
 	//图像特征匹配部分
 	void _IMStartHaar();
@@ -78,7 +80,7 @@ public slots:
 	void on_pushButtonFRRunRecBySelecte_clicked();  //基于选择的xml识别
 	void on_pushButtonFRCommonFaceRec_clicked();//普通人脸识别
 	void on_pushButtonFROnlyCamera_clicked();//只输出视频流
-
+	void on_pushButtonFRComFaceRecLBPH_clicked();
 	void on_pushButtonFRStop_clicked(); //停止识别工作
 
 
@@ -94,6 +96,12 @@ public slots:
 	void on_pushButtonIMShitomasi_clicked();
 	void on_pushButtonIMSift_clicked();
 	void on_pushButtonIMSurf_clicked();
+	void on_pushButtonIMHog_clicked();
+	void on_pushButtonIMDpmStart_clicked(); //DPM
+	void on_pushButtonIMDpmXml_clicked(); //DPM 加载xml文件
+	void on_pushButtonIMDpmClassName_clicked(); //DPM加载xml文件对应名字
+	void on_pushButtonIMTemplate_clicked();
+
 
 	//CNN
 };

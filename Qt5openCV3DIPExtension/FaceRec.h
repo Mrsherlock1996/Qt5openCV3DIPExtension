@@ -83,6 +83,7 @@ public:
 	//检测
 	void begainToRec();//直接将结果显示到ui中
 	void begainToCommonFaceRec();//大众人脸识别
+	void begainToCommonFaceRecLBPH();
 	//只实时显示
 	void onlyRealTimeShow();
 };

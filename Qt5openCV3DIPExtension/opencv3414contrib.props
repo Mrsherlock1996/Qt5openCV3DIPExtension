@@ -11,6 +11,9 @@
     <Link>
       <AdditionalDependencies>opencv_aruco3414d.lib;opencv_bgsegm3414d.lib;opencv_bioinspired3414d.lib;opencv_calib3d3414d.lib;opencv_ccalib3414d.lib;opencv_core3414d.lib;opencv_datasets3414d.lib;opencv_dnn3414d.lib;opencv_dnn_objdetect3414d.lib;opencv_dpm3414d.lib;opencv_face3414d.lib;opencv_features2d3414d.lib;opencv_flann3414d.lib;opencv_fuzzy3414d.lib;opencv_hfs3414d.lib;opencv_highgui3414d.lib;opencv_img_hash3414d.lib;opencv_imgcodecs3414d.lib;opencv_imgproc3414d.lib;opencv_line_descriptor3414d.lib;opencv_ml3414d.lib;opencv_objdetect3414d.lib;opencv_optflow3414d.lib;opencv_phase_unwrapping3414d.lib;opencv_photo3414d.lib;opencv_plot3414d.lib;opencv_reg3414d.lib;opencv_rgbd3414d.lib;opencv_saliency3414d.lib;opencv_shape3414d.lib;opencv_stereo3414d.lib;opencv_stitching3414d.lib;opencv_structured_light3414d.lib;opencv_superres3414d.lib;opencv_surface_matching3414d.lib;opencv_text3414d.lib;opencv_tracking3414d.lib;opencv_video3414d.lib;opencv_videoio3414d.lib;opencv_videostab3414d.lib;opencv_xfeatures2d3414d.lib;opencv_ximgproc3414d.lib;opencv_xobjdetect3414d.lib;opencv_xphoto3414d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <ClCompile>
+      <OpenMPSupport>true</OpenMPSupport>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup />
 </Project>

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1080</width>
-    <height>761</height>
+    <width>1191</width>
+    <height>858</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>3</number>
       </property>
       <property name="iconSize">
        <size>
@@ -69,17 +69,24 @@
            <string>识别(需载入XML文件)</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_9">
-           <item row="2" column="1" colspan="2">
-            <widget class="QPushButton" name="pushButtonFRCommonFaceRec">
-             <property name="text">
-              <string>大众人脸识别(无需训练)</string>
-             </property>
-            </widget>
-           </item>
            <item row="0" column="1">
             <widget class="QPushButton" name="pushButtonFRRunRecByGen">
              <property name="text">
               <string>开始检测(通过生成的XML)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1" colspan="2">
+            <widget class="QPushButton" name="pushButtonFRCommonFaceRec">
+             <property name="text">
+              <string>大众人脸识别(基于Haar)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1" colspan="2">
+            <widget class="QPushButton" name="pushButtonFROnlyCamera">
+             <property name="text">
+              <string>只打开视频(无检测,无识别)</string>
              </property>
             </widget>
            </item>
@@ -90,10 +97,10 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="1" colspan="2">
-            <widget class="QPushButton" name="pushButtonFROnlyCamera">
+           <item row="4" column="1" colspan="2">
+            <widget class="QPushButton" name="pushButtonFRComFaceRecLBPH">
              <property name="text">
-              <string>只打开视频(无检测,无识别)</string>
+              <string>大众人脸识别(基于LBPH)</string>
              </property>
             </widget>
            </item>
@@ -253,77 +260,19 @@
         <string>ImageMatch</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
-        <item row="0" column="0" rowspan="4" colspan="5">
+        <item row="0" column="0" rowspan="5" colspan="4">
          <widget class="QLabel" name="labelShowIMResult">
           <property name="text">
            <string>ResultImg</string>
           </property>
          </widget>
         </item>
-        <item row="6" column="3" colspan="2">
-         <widget class="QGroupBox" name="groupBoxButtons">
-          <property name="title">
-           <string>检测</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_3">
-           <item row="2" column="2">
-            <widget class="QPushButton" name="pushButtonIMHog">
-             <property name="text">
-              <string>HOG</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QPushButton" name="pushButtonIMSurf">
-             <property name="text">
-              <string>SURF</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QPushButton" name="pushButtonIMLbp">
-             <property name="text">
-              <string>LBP</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QPushButton" name="pushButtonIMSift">
-             <property name="text">
-              <string>SIFT</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="2">
-            <widget class="QPushButton" name="pushButtonIMDpm">
-             <property name="text">
-              <string>DPM</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QPushButton" name="pushButtonIMHaaris">
-             <property name="text">
-              <string>Harris(只检测)</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QPushButton" name="pushButtonIMShitomasi">
-             <property name="text">
-              <string>Shi-Tomasi(只检测)</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="5" column="0" rowspan="2" colspan="2">
+        <item row="6" column="0" rowspan="2" colspan="3">
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
            <widget class="QGroupBox" name="groupBoxSrc">
             <property name="title">
-             <string>训练图片(旧图片)</string>
+             <string>训练图片(旧图片)(模板图片)</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_8">
              <item row="0" column="0">
@@ -339,7 +288,7 @@
           <item>
            <widget class="QGroupBox" name="groupBoxTemplate">
             <property name="title">
-             <string>检测图片(新图片)</string>
+             <string>检测图片(新图片)(模板匹配图片)</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_17">
              <item row="0" column="0">
@@ -354,7 +303,161 @@
           </item>
          </layout>
         </item>
-        <item row="6" column="2">
+        <item row="4" column="4">
+         <widget class="QGroupBox" name="groupBox_13">
+          <property name="title">
+           <string>DPM</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_19">
+           <item row="2" column="0">
+            <widget class="QPushButton" name="pushButtonIMDpmClassName">
+             <property name="text">
+              <string>输入分类名称(English)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QPushButton" name="pushButtonIMDpmXml">
+             <property name="text">
+              <string>加载分类XML文件</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QPushButton" name="pushButtonIMDpmStart">
+             <property name="text">
+              <string>Start</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="6" column="3" rowspan="2" colspan="2">
+         <widget class="QGroupBox" name="groupBox_3">
+          <property name="title">
+           <string>路径</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QGroupBox" name="groupBox_11">
+             <property name="title">
+              <string>训练图片</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_2">
+              <item>
+               <widget class="QLabel" name="labelIMOldImgPath">
+                <property name="text">
+                 <string>训练图片路径</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_12">
+             <property name="title">
+              <string>检测图片</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_3">
+              <item>
+               <widget class="QLabel" name="labelIMNewImgPath">
+                <property name="text">
+                 <string>检测图片路径</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_14">
+             <property name="title">
+              <string>XML文件路径</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_20">
+              <item row="0" column="0">
+               <widget class="QLabel" name="labelIMDpmXmlPath">
+                <property name="text">
+                 <string>XML文件路径</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_15">
+             <property name="title">
+              <string>输入的分类名称</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_21">
+              <item row="0" column="0">
+               <widget class="QLabel" name="labelIMDpmClassName">
+                <property name="text">
+                 <string>ClassName</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="QGroupBox" name="groupBoxButtons">
+          <property name="title">
+           <string>工具</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_3">
+           <item row="4" column="1">
+            <widget class="QPushButton" name="pushButtonIMHog">
+             <property name="text">
+              <string>HOG(单张行人检测)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QPushButton" name="pushButtonIMShitomasi">
+             <property name="text">
+              <string>Shi-Tomasi(单张检测)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QPushButton" name="pushButtonIMHaaris">
+             <property name="text">
+              <string>Harris(单张检测)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QPushButton" name="pushButtonIMSift">
+             <property name="text">
+              <string>SIFT</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QPushButton" name="pushButtonIMSurf">
+             <property name="text">
+              <string>SURF</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="QPushButton" name="pushButtonIMTemplate">
+             <property name="text">
+              <string>模板匹配</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="4">
          <widget class="QGroupBox" name="groupBox">
           <property name="title">
            <string>工具</string>
@@ -393,47 +496,6 @@
              <property name="text">
               <string>显示检测原图</string>
              </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="5" column="2" colspan="3">
-         <widget class="QGroupBox" name="groupBox_3">
-          <property name="title">
-           <string>训练图片路径</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout">
-           <item>
-            <widget class="QGroupBox" name="groupBox_11">
-             <property name="title">
-              <string>训练</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_2">
-              <item>
-               <widget class="QLabel" name="labelIMOldImgPath">
-                <property name="text">
-                 <string>训练图片路径</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="groupBox_12">
-             <property name="title">
-              <string>检测</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_3">
-              <item>
-               <widget class="QLabel" name="labelIMNewImgPath">
-                <property name="text">
-                 <string>检测图片路径</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
             </widget>
            </item>
           </layout>
