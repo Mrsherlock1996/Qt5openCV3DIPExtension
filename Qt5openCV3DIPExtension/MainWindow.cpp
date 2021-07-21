@@ -4,6 +4,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
+	this->resize(1080, 720);
 	//时间显示部分
 	 _timeLabel = new QLabel; //显示时间的标签
 	_timer = new QTimer;
